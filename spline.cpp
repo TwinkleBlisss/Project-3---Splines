@@ -5,12 +5,18 @@ using namespace std;
 double splain(double x, double spln1_x[], double spln1_y[], double gamma[])
 {
     int i = 0;
-
-    while (x > (spln1_x[i]))
+    if (x <= spln1_x[0])
     {
-        i++;
+        i = 0;
     }
-    i--;
+    else
+    {
+        while (x > (spln1_x[i]))
+        {
+            i++;
+        }
+        i--;
+    }
     //cout << spln1_x[i];
     double h = spln1_x[i+1] - spln1_x[i];
     double y;
