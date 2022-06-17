@@ -70,10 +70,10 @@ void file_writing(int n, double spln_x[], double spln_y[], double gamma[], ofstr
         cout << "File didn't open.\n\n";
         exit(-2);
     }
-    for (double i = 0; i < spln_x[n-1]; i += step) {
+    for (double i = spln_x[0]; i < spln_x[n-1]; i += step) {
         spline << i << endl;
     }
-    for (double i = 0; i < spln_x[n-1]; i += step) {
+    for (double i = spln_x[0]; i < spln_x[n-1]; i += step) {
         spline << splain(i, spln_x, spln_y, gamma) << endl;
     }
 }
@@ -99,9 +99,14 @@ void intersection_point(int n, double spln1_x[], double spln2_x[], double spln1_
     y1 = splain(per, spln1_x, spln1_y, gamma1);
     y2 = splain(per, spln2_x, spln2_y, gamma2);
     if (abs(y1 - y2) <= eps){
+        double result[2] = {0};
         result[0] = per;
         result[1] = y1;
         cout << "Intersection point: x = " << per << ", y = " << y1;
+        ofstream intersection_point;
+        intersection_point.open(R"(C:\Users\honor\Desktop\intersection_point.txt)");
+        intersection_point << result[0] << "\n" << result[1];
+        intersection_point.close();
     }
     else
     {
@@ -110,13 +115,13 @@ void intersection_point(int n, double spln1_x[], double spln2_x[], double spln1_
 }
 
 int main() {
-    const int n = 10;
+    const int n = 4;
 
     // First function
     double* spln1_x = new double[size];
     double* spln1_y = new double[size];
     ifstream func1;
-    func1.open(R"(C:\Users\honor\Desktop\func1.txt)");
+    func1.open(R"(C:\Users\honor\Desktop\test21.txt)");
     file_reading(n, spln1_x, spln1_y, func1);
     func1.close();
 
@@ -124,7 +129,7 @@ int main() {
     double* spln2_x = new double[size];
     double* spln2_y = new double[size];
     ifstream func2;
-    func2.open(R"(C:\Users\honor\Desktop\func2.txt)");
+    func2.open(R"(C:\Users\honor\Desktop\test22.txt)");
     file_reading(n, spln2_x, spln2_y, func2);
     func2.close();
 
@@ -143,12 +148,13 @@ int main() {
     counting_arrays(n, h_i, h_i1, a, b, A, B, C, F, spln2_x, spln2_y, gamma2);
 
     // Записываем сплайны в файлы
-    double step = 0.01;
+    double step = 0.2;
     //First
     ofstream spline1;
     spline1.open(R"(C:\Users\honor\Desktop\spline1.txt)");
     file_writing(n, spln1_x, spln1_y, gamma1, spline1, step);
     spline1.close();
+    cout << endl;
     //Second
     ofstream spline2;
     spline2.open(R"(C:\Users\honor\Desktop\spline2.txt)");
@@ -160,13 +166,6 @@ int main() {
     // находим точку пересечения с помощью метода золотого сечения
     double result[2] = {0};
     intersection_point(n, spln1_x, spln2_x, spln1_y, spln2_y, gamma1, gamma2, result);
-
-    // записываем в файл точку пересечения
-    ofstream intersection_point;
-    intersection_point.open(R"(C:\Users\honor\Desktop\intersection_point.txt)");
-    intersection_point << result[0] << "\n" << result[1];
-    intersection_point.close();
-
 
     cout << "\n";
 
