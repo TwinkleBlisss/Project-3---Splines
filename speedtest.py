@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import numpy as np
+import os.path
 
 
 def Arrays(func):
@@ -9,10 +9,10 @@ def Arrays(func):
     return X, Y
 
 
-func1 = open('C:\\Users\\honor\\Desktop\\func1.txt', 'r')
+func1 = open('C:\\Users\\honor\\Desktop\\test21.txt', 'r')
 X1, Y1 = Arrays(func1)
 func1.close()
-func2 = open('C:\\Users\\honor\\Desktop\\func2.txt', 'r')
+func2 = open('C:\\Users\\honor\\Desktop\\test22.txt', 'r')
 X2, Y2 = Arrays(func2)
 func2.close()
 
@@ -34,15 +34,20 @@ spline1.close()
 spline2 = open('C:\\Users\\honor\\Desktop\\spline2.txt', 'r')
 X_spline2, Y_spline2 = Arrays(spline2)
 spline2.close()
-point = open('C:\\Users\\honor\\Desktop\\intersection_point.txt', 'r')
-intersection_point = [float(line.strip()) for line in point]
-point.close()
+f = 0
+if os.path.exists('C:\\Users\\honor\\Desktop\\intersection_point.txt'):
+    point = open('C:\\Users\\honor\\Desktop\\intersection_point.txt', 'r')
+    if point:
+        intersection_point = [float(line.strip()) for line in point]
+        f = 1
+    point.close()
 
 
 ax2 = fig.add_subplot(122)
-plt.plot(X1, Y1, color='red', label='spline1')
-plt.plot(X2, Y2, color='green', label='spline2')
-plt.scatter(intersection_point[0], intersection_point[1], linewidth=3, marker='x', color='purple')
+plt.plot(X_spline1, Y_spline1, color='red', label='spline1')
+plt.plot(X_spline2, Y_spline2, color='green', label='spline2')
+if f:
+    plt.scatter(intersection_point[0], intersection_point[1], linewidth=3, marker='x', color='purple')
 plt.xlabel("x")
 plt.ylabel("y")
 plt.legend()
